@@ -5,35 +5,49 @@ use serde::{Serialize, Deserialize};
 // use reqwest::Response;
 // use serde_json;
 
-pub mod upbit {
-  pub fn bar() {
-    println!("Hello, world!");
-  }
-}
+pub mod upbit {}
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct StockByUpbit<'a, 'b, 'c> {
-  pub candleAccTradePrice: f64,
+pub struct StockByUpbit {
+  // pub candleDateTimeKst:  &'b str,
+  // pub candleDateTime: &'a str,
+  // pub code:  &'c str,
   pub candleAccTradeVolume:  f64,
-  pub candleDateTime: &'a str,
-  pub candleDateTimeKst:  &'b str,
-  pub code:  &'c str,
+  pub candleAccTradePrice: f64,
+  pub openingPrice:  f64,
+  pub tradePrice:  f64,
   pub highPrice:  f64,
   pub lowPrice:  f64,
-  pub openingPrice:  f64,
   pub timestamp: i128,
-  pub tradePrice:  f64,
   pub unit:  i128,
 }
 
-pub fn get_raw_by_upbit() -> Result<String, reqwest::Error>{
-  let url = "https://crix-api-cdn.upbit.com/v1/crix/candles/minutes/30?code=CRIX.UPBIT.KRW-BTC&count=20&ciqrandom=1633651016830";
-  let client = reqwest::blocking::Client::builder()
-    .danger_accept_invalid_certs(true)
-    .build()?;
-    
-  let resp: reqwest::blocking::Response = client.get(url).send()?;
-  let raw_text = resp.text()?;
- 
-  Ok(raw_text)
+#[derive(Serialize, Deserialize, Debug)]
+pub struct UpbitCrawler {
+  pub stocks: Vec<StockByUpbit>,
+}
+
+impl UpbitCrawler {
+  pub fn new(count: i32) -> Result<String, reqwest::Error> {
+    let url = format!("https://crix-api-cdn.upbit.com/v1/crix/candles/minutes/30?code=CRIX.UPBIT.KRW-BTC&count={}&ciqrandom=1633651016830", count);
+    let client = reqwest::blocking::Client::builder()
+      .danger_accept_invalid_certs(true)
+      .build().unwrap();
+
+    let raw_text: String = client.get(url).send().unwrap().text().unwrap();
+
+    Ok(raw_text)
+  }
+
+  pub fn parse(raw_text: &str) -> Result<UpbitCrawler, serde_json::Error> {
+    let socket_upbit: Vec<StockByUpbit> = serde_json::from_str(&raw_text).unwrap();
+
+    Ok(UpbitCrawler{stocks: socket_upbit})
+  }
+
+  pub fn show(&self) {
+      for stock in &self.stocks {
+      println!("tradePrice: {:?}", stock.tradePrice);
+    }
+  }
 }
