@@ -1,9 +1,9 @@
 use reqwest;
-use std::collections::HashMap;
-use reqwest::Error;
-use reqwest::Response;
 use serde::{Serialize, Deserialize};
-use serde_json;
+// use std::collections::HashMap;
+// use reqwest::Error;
+// use reqwest::Response;
+// use serde_json;
 
 pub mod upbit {
   pub fn bar() {
