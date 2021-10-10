@@ -22,14 +22,14 @@ pub struct UpbitCrawler {
 }
 
 pub trait Crawler {
-  fn new(count: i32) -> Result<String, reqwest::Error>;
+  fn new(count: i32, symbol: &String) -> Result<String, reqwest::Error>;
   fn parse(raw_text: &str) -> Result<UpbitCrawler, serde_json::Error>;
   fn show(&self);
 }
 
 impl Crawler for UpbitCrawler {
-  fn new(count: i32) -> Result<String, reqwest::Error> {
-    let url = format!("https://crix-api-cdn.upbit.com/v1/crix/candles/minutes/30?code=CRIX.UPBIT.KRW-BTC&count={}&ciqrandom=1633651016830", count);
+  fn new(count: i32, symbol: &String) -> Result<String, reqwest::Error> {
+    let url = format!("https://crix-api-cdn.upbit.com/v1/crix/candles/minutes/30?code=CRIX.UPBIT.KRW-{}&count={}&ciqrandom=1633651016830", &symbol, count, );
     let client = reqwest::blocking::Client::builder()
       .danger_accept_invalid_certs(true)
       .build().unwrap();

@@ -4,14 +4,17 @@ use upbit::UpbitCrawler;
 use crate::upbit::Crawler;
 
 fn main() {
-  println!("[REQUEST] count:1 ");
-  let raw_text: String =UpbitCrawler::new(1).unwrap();
+  let btc_symbol: String = String::from("BTC");
+  println!("[REQUEST] count:1 {}", btc_symbol);
+  let raw_text: String =UpbitCrawler::new(1, &btc_symbol).unwrap();
   let stocks: UpbitCrawler = UpbitCrawler::parse(&raw_text).unwrap();
   stocks.show();
 
   println!("");
-  println!("[REQUEST] count:3 ");
-  let raw_text: String =UpbitCrawler::new(3).unwrap();
+
+  let eth_symbol: String = String::from("ETH");
+  println!("[REQUEST] count:1 {}", eth_symbol);
+  let raw_text: String =UpbitCrawler::new(3, &eth_symbol).unwrap();
   let stocks: UpbitCrawler = UpbitCrawler::parse(&raw_text).unwrap();
   stocks.show();
 }
