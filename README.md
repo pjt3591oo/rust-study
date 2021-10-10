@@ -5,5 +5,7 @@
 * run
 
 ```bash
-$ cargo run
+$ cargo run [Coin Symbol] [count]
+
+$ cargo run BTC 10
 ```

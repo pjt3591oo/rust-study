@@ -1,20 +1,17 @@
 mod upbit;
-use upbit::UpbitCrawler;
 
-use crate::upbit::Crawler;
+use crate::upbit as other_upbit;
+use other_upbit::{ Crawler, UpbitCrawler };
 
 fn main() {
-  let btc_symbol: String = String::from("BTC");
-  println!("[REQUEST] count:1 {}", btc_symbol);
-  let raw_text: String =UpbitCrawler::new(1, &btc_symbol).unwrap();
-  let stocks: UpbitCrawler = UpbitCrawler::parse(&raw_text).unwrap();
-  stocks.show();
+  let mut symbol: String = std::env::args().nth(1).expect("symbol must exist");
+  let count: String = std::env::args().nth(2).expect("count must exist");
+  let count: i32 = count.parse::<i32>().expect("count must be integer");
+  
+  symbol = symbol.to_uppercase();
 
-  println!("");
-
-  let eth_symbol: String = String::from("ETH");
-  println!("[REQUEST] count:1 {}", eth_symbol);
-  let raw_text: String =UpbitCrawler::new(3, &eth_symbol).unwrap();
+  println!("[REQUEST] count:{}, symbol: {}", count, &symbol);
+  let raw_text: String = UpbitCrawler::new(count, &symbol).unwrap();
   let stocks: UpbitCrawler = UpbitCrawler::parse(&raw_text).unwrap();
   stocks.show();
 }
