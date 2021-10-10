@@ -1,17 +1,7 @@
 mod upbit;
 use upbit::UpbitCrawler;
 
-// #[derive(Serialize, Deserialize, Debug)]
-// struct StockByUpbit {
-//   pub candleAccTradeVolume:  f64,
-//   pub candleAccTradePrice: f64,
-//   pub openingPrice:  f64,
-//   pub tradePrice:  f64,
-//   pub highPrice:  f64,
-//   pub lowPrice:  f64,
-//   pub timestamp: i128,
-//   pub unit:  i128,
-// }
+use crate::upbit::Crawler;
 
 fn main() {
   println!("[REQUEST] count:1 ");
